@@ -1,0 +1,10 @@
+{
+  "private": true,
+  "scripts": {
+    "start": "graphile-migrate watch",
+    "mig-init": "graphile-migrate init"
+  },
+  "dependencies": {
+    "graphile-migrate": "^1.0.2"
+  }
+}
