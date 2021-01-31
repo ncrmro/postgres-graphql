@@ -2,6 +2,7 @@
   "private": true,
   "scripts": {
     "start": "graphile-migrate watch",
+    "commit": "graphile-migrate commit",
     "mig-init": "graphile-migrate init"
   },
   "dependencies": {
