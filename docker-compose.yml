@@ -21,5 +21,19 @@ services:
     depends_on:
       - db
 
+  gql:
+    build:
+      context: .
+      target: dev
+      dockerfile: apps/graphql/Dockerfile
+    volumes:
+      - ./apps/graphql:/app
+    env_file:
+      - .env
+    ports:
+      - 5000:5000
+    depends_on:
+      - migrations
+
 volumes:
   pg_data:
