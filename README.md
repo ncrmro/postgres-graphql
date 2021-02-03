@@ -12,6 +12,14 @@ furthermore in our frontend applications we can automatically generate
 Typescript Types and Typed requests to interact with our API improving
 development agility and our application's integrity.
 
+This README contains the following sections.
+
+- [Getting Started](#getting-started)
+  - [Database](#database)
+    - [Schema and Migrations](#schema-and-migrations)
+  - [GraphQL](#graphql)
+    - [GraphiQL](#graphiql)
+
 ## Getting Started
 
 The only hard requirement is that you have `docker` and `docker-compose`
