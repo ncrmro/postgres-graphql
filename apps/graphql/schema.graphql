@@ -1,8 +1,1089 @@
+"""All input for the `authenticate` mutation."""
+input AuthenticateInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  password: String!
+  username: String!
+}
+
+"""The output of our `authenticate` mutation."""
+type AuthenticatePayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+  jwtToken: JwtToken
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+}
+
+"""
+A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’
+"""
+input BooleanFilter {
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Boolean
+
+  """Greater than the specified value."""
+  greaterThan: Boolean
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Boolean
+
+  """Included in the specified list."""
+  in: [Boolean!]
+
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Less than the specified value."""
+  lessThan: Boolean
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Boolean
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: Boolean
+
+  """Not equal to the specified value."""
+  notEqualTo: Boolean
+
+  """Not included in the specified list."""
+  notIn: [Boolean!]
+}
+
+"""All input for the create `UserEmail` mutation."""
+input CreateUserEmailInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `UserEmail` to be created by this mutation."""
+  userEmail: UserEmailInput!
+}
+
+"""The output of our create `UserEmail` mutation."""
+type CreateUserEmailPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `UserEmail`."""
+  userByUserId: User
+
+  """The `UserEmail` that was created by this mutation."""
+  userEmail: UserEmail
+
+  """An edge for our `UserEmail`. May be used by Relay 1."""
+  userEmailEdge(
+    """The method to use when ordering `UserEmail`."""
+    orderBy: [UserEmailsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UserEmailsEdge
+}
+
+"""All input for the create `User` mutation."""
+input CreateUserInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The `User` to be created by this mutation."""
+  user: UserInput!
+}
+
+"""The output of our create `User` mutation."""
+type CreateUserPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """The `User` that was created by this mutation."""
+  user: User
+
+  """An edge for our `User`. May be used by Relay 1."""
+  userEdge(
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UsersEdge
+}
+
+"""A location in a connection that can be used for resuming pagination."""
+scalar Cursor
+
+"""
+A point in time as described by the [ISO
+8601](https://en.wikipedia.org/wiki/ISO_8601) standard. May or may not include a timezone.
+"""
+scalar Datetime
+
+"""All input for the `deleteUserById` mutation."""
+input DeleteUserByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """Unique identifier for the user."""
+  id: UUID!
+}
+
+"""All input for the `deleteUserByUsername` mutation."""
+input DeleteUserByUsernameInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """Public-facing username (or 'handle') of the user."""
+  username: String!
+}
+
+"""All input for the `deleteUserEmailById` mutation."""
+input DeleteUserEmailByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: UUID!
+}
+
+"""All input for the `deleteUserEmailByUserIdAndEmail` mutation."""
+input DeleteUserEmailByUserIdAndEmailInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The users email address, in `a@b.c` format."""
+  email: String!
+  userId: UUID!
+}
+
+"""The output of our delete `UserEmail` mutation."""
+type DeleteUserEmailPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+  deletedUserEmailId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `UserEmail`."""
+  userByUserId: User
+
+  """The `UserEmail` that was deleted by this mutation."""
+  userEmail: UserEmail
+
+  """An edge for our `UserEmail`. May be used by Relay 1."""
+  userEmailEdge(
+    """The method to use when ordering `UserEmail`."""
+    orderBy: [UserEmailsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UserEmailsEdge
+}
+
+"""The output of our delete `User` mutation."""
+type DeleteUserPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+  deletedUserId: ID
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """The `User` that was deleted by this mutation."""
+  user: User
+
+  """An edge for our `User`. May be used by Relay 1."""
+  userEdge(
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UsersEdge
+}
+
+"""
+A JSON Web Token defined by [RFC 7519](https://tools.ietf.org/html/rfc7519)
+which securely represents claims between two parties.
+"""
+scalar JwtToken
+
+"""
+The root mutation type which contains root level fields which mutate data.
+"""
+type Mutation {
+  """
+  Creates a JWT token that will securely identify a user and give them certain permissions. This token expires in 2 days.
+  """
+  authenticate(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: AuthenticateInput!
+  ): AuthenticatePayload
+
+  """Creates a single `User`."""
+  createUser(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateUserInput!
+  ): CreateUserPayload
+
+  """Creates a single `UserEmail`."""
+  createUserEmail(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: CreateUserEmailInput!
+  ): CreateUserEmailPayload
+
+  """Deletes a single `User` using a unique key."""
+  deleteUserById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUserByIdInput!
+  ): DeleteUserPayload
+
+  """Deletes a single `User` using a unique key."""
+  deleteUserByUsername(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUserByUsernameInput!
+  ): DeleteUserPayload
+
+  """Deletes a single `UserEmail` using a unique key."""
+  deleteUserEmailById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUserEmailByIdInput!
+  ): DeleteUserEmailPayload
+
+  """Deletes a single `UserEmail` using a unique key."""
+  deleteUserEmailByUserIdAndEmail(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: DeleteUserEmailByUserIdAndEmailInput!
+  ): DeleteUserEmailPayload
+
+  """Registers a single user and creates an account in our forum."""
+  registerUser(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: RegisterUserInput!
+  ): RegisterUserPayload
+
+  """Updates a single `User` using a unique key and a patch."""
+  updateUserById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserByIdInput!
+  ): UpdateUserPayload
+
+  """Updates a single `User` using a unique key and a patch."""
+  updateUserByUsername(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserByUsernameInput!
+  ): UpdateUserPayload
+
+  """Updates a single `UserEmail` using a unique key and a patch."""
+  updateUserEmailById(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserEmailByIdInput!
+  ): UpdateUserEmailPayload
+
+  """Updates a single `UserEmail` using a unique key and a patch."""
+  updateUserEmailByUserIdAndEmail(
+    """
+    The exclusive input argument for this mutation. An object type, make sure to see documentation for this object’s fields.
+    """
+    input: UpdateUserEmailByUserIdAndEmailInput!
+  ): UpdateUserEmailPayload
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, the cursor to continue."""
+  endCursor: Cursor
+
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: Cursor
+}
+
 """The root query type which gives access points into the data universe."""
 type Query {
+  """Reads and enables pagination through a set of `UserEmail`."""
+  allUserEmails(
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserEmailCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserEmailFilter
+
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """The method to use when ordering `UserEmail`."""
+    orderBy: [UserEmailsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UserEmailsConnection
+
+  """Reads and enables pagination through a set of `User`."""
+  allUsers(
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserFilter
+
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UsersConnection
+
   """
   Exposes the root query type nested one level down. This is helpful for Relay 1
   which can only query top level fields if they are in a particular form.
   """
   query: Query!
+  userById(id: UUID!): User
+  userByUsername(username: String!): User
+  userEmailById(id: UUID!): UserEmail
+  userEmailByUserIdAndEmail(email: String!, userId: UUID!): UserEmail
+
+  """The currently logged in user (or null if not logged in)."""
+  viewer: User
+
+  """
+  Handy method to get the current user ID for use in RLS policies, etc; in GraphQL, use `currentUser{id}` instead.
+  """
+  viewerId: UUID
+}
+
+"""All input for the `registerUser` mutation."""
+input RegisterUserInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  email: String!
+  password: String!
+}
+
+"""The output of our `registerUser` mutation."""
+type RegisterUserPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+  jwtToken: JwtToken
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+}
+
+"""
+A filter to be used against String fields. All fields are combined with a logical ‘and.’
+"""
+input StringFilter {
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: String
+
+  """
+  Not equal to the specified value, treating null like an ordinary value (case-insensitive).
+  """
+  distinctFromInsensitive: String
+
+  """Ends with the specified string (case-sensitive)."""
+  endsWith: String
+
+  """Ends with the specified string (case-insensitive)."""
+  endsWithInsensitive: String
+
+  """Equal to the specified value."""
+  equalTo: String
+
+  """Equal to the specified value (case-insensitive)."""
+  equalToInsensitive: String
+
+  """Greater than the specified value."""
+  greaterThan: String
+
+  """Greater than the specified value (case-insensitive)."""
+  greaterThanInsensitive: String
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: String
+
+  """Greater than or equal to the specified value (case-insensitive)."""
+  greaterThanOrEqualToInsensitive: String
+
+  """Included in the specified list."""
+  in: [String!]
+
+  """Contains the specified string (case-sensitive)."""
+  includes: String
+
+  """Contains the specified string (case-insensitive)."""
+  includesInsensitive: String
+
+  """Included in the specified list (case-insensitive)."""
+  inInsensitive: [String!]
+
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Less than the specified value."""
+  lessThan: String
+
+  """Less than the specified value (case-insensitive)."""
+  lessThanInsensitive: String
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: String
+
+  """Less than or equal to the specified value (case-insensitive)."""
+  lessThanOrEqualToInsensitive: String
+
+  """
+  Matches the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  like: String
+
+  """
+  Matches the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  likeInsensitive: String
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: String
+
+  """
+  Equal to the specified value, treating null like an ordinary value (case-insensitive).
+  """
+  notDistinctFromInsensitive: String
+
+  """Does not end with the specified string (case-sensitive)."""
+  notEndsWith: String
+
+  """Does not end with the specified string (case-insensitive)."""
+  notEndsWithInsensitive: String
+
+  """Not equal to the specified value."""
+  notEqualTo: String
+
+  """Not equal to the specified value (case-insensitive)."""
+  notEqualToInsensitive: String
+
+  """Not included in the specified list."""
+  notIn: [String!]
+
+  """Does not contain the specified string (case-sensitive)."""
+  notIncludes: String
+
+  """Does not contain the specified string (case-insensitive)."""
+  notIncludesInsensitive: String
+
+  """Not included in the specified list (case-insensitive)."""
+  notInInsensitive: [String!]
+
+  """
+  Does not match the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  notLike: String
+
+  """
+  Does not match the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters.
+  """
+  notLikeInsensitive: String
+
+  """Does not start with the specified string (case-sensitive)."""
+  notStartsWith: String
+
+  """Does not start with the specified string (case-insensitive)."""
+  notStartsWithInsensitive: String
+
+  """Starts with the specified string (case-sensitive)."""
+  startsWith: String
+
+  """Starts with the specified string (case-insensitive)."""
+  startsWithInsensitive: String
+}
+
+"""All input for the `updateUserById` mutation."""
+input UpdateUserByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """Unique identifier for the user."""
+  id: UUID!
+
+  """
+  An object where the defined keys will be set on the `User` being updated.
+  """
+  userPatch: UserPatch!
+}
+
+"""All input for the `updateUserByUsername` mutation."""
+input UpdateUserByUsernameInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """Public-facing username (or 'handle') of the user."""
+  username: String!
+
+  """
+  An object where the defined keys will be set on the `User` being updated.
+  """
+  userPatch: UserPatch!
+}
+
+"""All input for the `updateUserEmailById` mutation."""
+input UpdateUserEmailByIdInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+  id: UUID!
+
+  """
+  An object where the defined keys will be set on the `UserEmail` being updated.
+  """
+  userEmailPatch: UserEmailPatch!
+}
+
+"""All input for the `updateUserEmailByUserIdAndEmail` mutation."""
+input UpdateUserEmailByUserIdAndEmailInput {
+  """
+  An arbitrary string value with no semantic meaning. Will be included in the
+  payload verbatim. May be used to track mutations by the client.
+  """
+  clientMutationId: String
+
+  """The users email address, in `a@b.c` format."""
+  email: String!
+
+  """
+  An object where the defined keys will be set on the `UserEmail` being updated.
+  """
+  userEmailPatch: UserEmailPatch!
+  userId: UUID!
+}
+
+"""The output of our update `UserEmail` mutation."""
+type UpdateUserEmailPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """Reads a single `User` that is related to this `UserEmail`."""
+  userByUserId: User
+
+  """The `UserEmail` that was updated by this mutation."""
+  userEmail: UserEmail
+
+  """An edge for our `UserEmail`. May be used by Relay 1."""
+  userEmailEdge(
+    """The method to use when ordering `UserEmail`."""
+    orderBy: [UserEmailsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UserEmailsEdge
+}
+
+"""The output of our update `User` mutation."""
+type UpdateUserPayload {
+  """
+  The exact same `clientMutationId` that was provided in the mutation input,
+  unchanged and unused. May be used by a client to track mutations.
+  """
+  clientMutationId: String
+
+  """
+  Our root query field type. Allows us to run any query from our mutation payload.
+  """
+  query: Query
+
+  """The `User` that was updated by this mutation."""
+  user: User
+
+  """An edge for our `User`. May be used by Relay 1."""
+  userEdge(
+    """The method to use when ordering `User`."""
+    orderBy: [UsersOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UsersEdge
+}
+
+"""A user who can log in to the application."""
+type User {
+  """Optional avatar URL."""
+  avatarUrl: String
+  createdAt: Datetime!
+  hasPassword: Boolean
+
+  """Unique identifier for the user."""
+  id: UUID!
+
+  """If true, the user has elevated privileges."""
+  isAdmin: Boolean!
+  isVerified: Boolean!
+
+  """Public-facing name (or pseudonym) of the user."""
+  name: String
+  updatedAt: Datetime!
+
+  """Reads and enables pagination through a set of `UserEmail`."""
+  userEmailsByUserId(
+    """Read all values in the set after (below) this cursor."""
+    after: Cursor
+
+    """Read all values in the set before (above) this cursor."""
+    before: Cursor
+
+    """
+    A condition to be used in determining which values should be returned by the collection.
+    """
+    condition: UserEmailCondition
+
+    """
+    A filter to be used in determining which values should be returned by the collection.
+    """
+    filter: UserEmailFilter
+
+    """Only read the first `n` values of the set."""
+    first: Int
+
+    """Only read the last `n` values of the set."""
+    last: Int
+
+    """
+    Skip the first `n` values from our `after` cursor, an alternative to cursor
+    based pagination. May not be used with `last`.
+    """
+    offset: Int
+
+    """The method to use when ordering `UserEmail`."""
+    orderBy: [UserEmailsOrderBy!] = [PRIMARY_KEY_ASC]
+  ): UserEmailsConnection!
+
+  """Public-facing username (or 'handle') of the user."""
+  username: String!
+}
+
+"""
+A condition to be used against `User` object types. All fields are tested for equality and combined with a logical ‘and.’
+"""
+input UserCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: UUID
+
+  """Checks for equality with the object’s `username` field."""
+  username: String
+}
+
+"""Information about a user's email address."""
+type UserEmail {
+  createdAt: Datetime!
+
+  """The users email address, in `a@b.c` format."""
+  email: String!
+  id: UUID!
+  isPrimary: Boolean!
+
+  """
+  True if the user has is_verified their email address (by clicking the link in the email we sent them, or logging in with a social login provider), false otherwise.
+  """
+  isVerified: Boolean!
+  updatedAt: Datetime!
+
+  """Reads a single `User` that is related to this `UserEmail`."""
+  userByUserId: User
+  userId: UUID!
+}
+
+"""
+A condition to be used against `UserEmail` object types. All fields are tested
+for equality and combined with a logical ‘and.’
+"""
+input UserEmailCondition {
+  """Checks for equality with the object’s `id` field."""
+  id: UUID
+
+  """Checks for equality with the object’s `isPrimary` field."""
+  isPrimary: Boolean
+
+  """Checks for equality with the object’s `userId` field."""
+  userId: UUID
+}
+
+"""
+A filter to be used against `UserEmail` object types. All fields are combined with a logical ‘and.’
+"""
+input UserEmailFilter {
+  """Checks for all expressions in this list."""
+  and: [UserEmailFilter!]
+
+  """Filter by the object’s `id` field."""
+  id: UUIDFilter
+
+  """Filter by the object’s `isPrimary` field."""
+  isPrimary: BooleanFilter
+
+  """Negates the expression."""
+  not: UserEmailFilter
+
+  """Checks for any expressions in this list."""
+  or: [UserEmailFilter!]
+
+  """Filter by the object’s `userId` field."""
+  userId: UUIDFilter
+}
+
+"""An input for mutations affecting `UserEmail`"""
+input UserEmailInput {
+  createdAt: Datetime
+
+  """The users email address, in `a@b.c` format."""
+  email: String!
+  id: UUID
+  isPrimary: Boolean
+
+  """
+  True if the user has is_verified their email address (by clicking the link in the email we sent them, or logging in with a social login provider), false otherwise.
+  """
+  isVerified: Boolean
+  updatedAt: Datetime
+  userId: UUID
+}
+
+"""
+Represents an update to a `UserEmail`. Fields that are set will be updated.
+"""
+input UserEmailPatch {
+  createdAt: Datetime
+
+  """The users email address, in `a@b.c` format."""
+  email: String
+  id: UUID
+  isPrimary: Boolean
+
+  """
+  True if the user has is_verified their email address (by clicking the link in the email we sent them, or logging in with a social login provider), false otherwise.
+  """
+  isVerified: Boolean
+  updatedAt: Datetime
+  userId: UUID
+}
+
+"""A connection to a list of `UserEmail` values."""
+type UserEmailsConnection {
+  """
+  A list of edges which contains the `UserEmail` and cursor to aid in pagination.
+  """
+  edges: [UserEmailsEdge!]!
+
+  """A list of `UserEmail` objects."""
+  nodes: [UserEmail!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `UserEmail` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `UserEmail` edge in the connection."""
+type UserEmailsEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `UserEmail` at the end of the edge."""
+  node: UserEmail!
+}
+
+"""Methods to use when ordering `UserEmail`."""
+enum UserEmailsOrderBy {
+  ID_ASC
+  ID_DESC
+  IS_PRIMARY_ASC
+  IS_PRIMARY_DESC
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  USER_BY_USER_ID__ID_ASC
+  USER_BY_USER_ID__ID_DESC
+  USER_BY_USER_ID__USERNAME_ASC
+  USER_BY_USER_ID__USERNAME_DESC
+  USER_ID_ASC
+  USER_ID_DESC
+}
+
+"""
+A filter to be used against `User` object types. All fields are combined with a logical ‘and.’
+"""
+input UserFilter {
+  """Checks for all expressions in this list."""
+  and: [UserFilter!]
+
+  """Filter by the object’s `hasPassword` field."""
+  hasPassword: BooleanFilter
+
+  """Filter by the object’s `id` field."""
+  id: UUIDFilter
+
+  """Negates the expression."""
+  not: UserFilter
+
+  """Checks for any expressions in this list."""
+  or: [UserFilter!]
+
+  """Filter by the object’s `username` field."""
+  username: StringFilter
+}
+
+"""An input for mutations affecting `User`"""
+input UserInput {
+  """Optional avatar URL."""
+  avatarUrl: String
+  createdAt: Datetime
+
+  """Unique identifier for the user."""
+  id: UUID
+
+  """If true, the user has elevated privileges."""
+  isAdmin: Boolean
+  isVerified: Boolean
+
+  """Public-facing name (or pseudonym) of the user."""
+  name: String
+  updatedAt: Datetime
+
+  """Public-facing username (or 'handle') of the user."""
+  username: String!
+}
+
+"""Represents an update to a `User`. Fields that are set will be updated."""
+input UserPatch {
+  """Optional avatar URL."""
+  avatarUrl: String
+  createdAt: Datetime
+
+  """Unique identifier for the user."""
+  id: UUID
+
+  """If true, the user has elevated privileges."""
+  isAdmin: Boolean
+  isVerified: Boolean
+
+  """Public-facing name (or pseudonym) of the user."""
+  name: String
+  updatedAt: Datetime
+
+  """Public-facing username (or 'handle') of the user."""
+  username: String
+}
+
+"""A connection to a list of `User` values."""
+type UsersConnection {
+  """
+  A list of edges which contains the `User` and cursor to aid in pagination.
+  """
+  edges: [UsersEdge!]!
+
+  """A list of `User` objects."""
+  nodes: [User!]!
+
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+
+  """The count of *all* `User` you could get from the connection."""
+  totalCount: Int!
+}
+
+"""A `User` edge in the connection."""
+type UsersEdge {
+  """A cursor for use in pagination."""
+  cursor: Cursor
+
+  """The `User` at the end of the edge."""
+  node: User!
+}
+
+"""Methods to use when ordering `User`."""
+enum UsersOrderBy {
+  ID_ASC
+  ID_DESC
+  NATURAL
+  PRIMARY_KEY_ASC
+  PRIMARY_KEY_DESC
+  USER_EMAILS_BY_USER_ID__COUNT_ASC
+  USER_EMAILS_BY_USER_ID__COUNT_DESC
+  USERNAME_ASC
+  USERNAME_DESC
+}
+
+"""
+A universally unique identifier as defined by [RFC 4122](https://tools.ietf.org/html/rfc4122).
+"""
+scalar UUID
+
+"""
+A filter to be used against UUID fields. All fields are combined with a logical ‘and.’
+"""
+input UUIDFilter {
+  """
+  Not equal to the specified value, treating null like an ordinary value.
+  """
+  distinctFrom: UUID
+
+  """Equal to the specified value."""
+  equalTo: UUID
+
+  """Greater than the specified value."""
+  greaterThan: UUID
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: UUID
+
+  """Included in the specified list."""
+  in: [UUID!]
+
+  """
+  Is null (if `true` is specified) or is not null (if `false` is specified).
+  """
+  isNull: Boolean
+
+  """Less than the specified value."""
+  lessThan: UUID
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: UUID
+
+  """Equal to the specified value, treating null like an ordinary value."""
+  notDistinctFrom: UUID
+
+  """Not equal to the specified value."""
+  notEqualTo: UUID
+
+  """Not included in the specified list."""
+  notIn: [UUID!]
 }

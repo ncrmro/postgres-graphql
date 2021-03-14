@@ -9,7 +9,7 @@ const query = gql`
 `;
 
 const user = {
-  email: "test@test.com",
+  username: "test@test.com",
   password: "test123",
 };
 

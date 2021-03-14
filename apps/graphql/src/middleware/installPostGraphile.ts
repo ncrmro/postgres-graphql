@@ -1,17 +1,7 @@
 import { Express, Request, Response } from "express";
 import { NodePlugin } from "graphile-build";
 import { Pool, PoolClient } from "pg";
-import {
-  // enhanceHttpServerWithSubscriptions,
-  // makePluginHook,
-  // Middleware,
-  postgraphile,
-  PostGraphileOptions,
-} from "postgraphile";
-import {
-  // getHttpServer,
-  getWebsocketMiddlewares,
-} from "../app";
+import { postgraphile, PostGraphileOptions } from "postgraphile";
 import { getAuthPgPool, getRootPgPool } from "./installDatabasePools";
 import handleErrors from "../utils/handleErrors";
 
@@ -35,11 +25,9 @@ export function getPostGraphileOptions({
   // websocketMiddlewares,
   rootPgPool,
 }: IPostGraphileOptionsOptions) {
-  // @ts-ignore
-  // @ts-ignore
   const options: PostGraphileOptions<Request, Response> = {
-    // This is for PostGraphile server plugins: https://www.graphile.org/postgraphile/plugins/
-    // pluginHook,
+    jwtPgTypeIdentifier: "app_public.jwt_token",
+    jwtSecret: process.env.JWT_SECRET_KEY,
 
     // This is so that PostGraphile installs the watch fixtures, it's also needed to enable live queries
     ownerConnectionString: process.env.DATABASE_URL,
@@ -49,11 +37,6 @@ export function getPostGraphileOptions({
     // For these reasons, we're going to keep retryOnInitFail enabled for both environments.
     retryOnInitFail: !isTest,
 
-    // Add websocket support to the PostGraphile server; you still need to use a subscriptions plugin such as
-    // @graphile/pg-pubsub
-    subscriptions: true,
-    // websocketMiddlewares,
-
     // enableQueryBatching: On the client side, use something like apollo-link-batch-http to make use of this
     enableQueryBatching: true,
 
@@ -61,7 +44,7 @@ export function getPostGraphileOptions({
     dynamicJson: true,
 
     // ignoreRBAC=false: honour the permissions in your DB - don't expose what you don't GRANT
-    ignoreRBAC: false,
+    ignoreRBAC: true,
 
     // ignoreIndexes=false: honour your DB indexes - only expose things that are fast
     ignoreIndexes: false,
@@ -77,39 +60,11 @@ export function getPostGraphileOptions({
     allowExplain: isDev,
 
     // Disable query logging - we're using morgan
-    disableQueryLog: true,
+    // disableQueryLog: true,
 
     // Custom error handling
     // @ts-ignore
     handleErrors,
-    /*
-     * To use the built in PostGraphile error handling, you can use the
-     * following code instead of `handleErrors` above. Using `handleErrors`
-     * gives you much more control (and stability) over how errors are
-     * output to the user.
-     */
-    /*
-        // See https://www.graphile.org/postgraphile/debugging/
-        extendedErrors:
-          isDev || isTest
-            ? [
-                "errcode",
-                "severity",
-                "detail",
-                "hint",
-                "positon",
-                "internalPosition",
-                "internalQuery",
-                "where",
-                "schema",
-                "table",
-                "column",
-                "dataType",
-                "constraint",
-              ]
-            : ["errcode"],
-        showErrorStack: isDev || isTest,
-        */
 
     // Automatically update GraphQL schema when database changes
     watchPg: isDev,
@@ -135,54 +90,15 @@ export function getPostGraphileOptions({
       NodePlugin,
     ],
 
-    graphileBuildOptions: {
-      /*
-       * Any properties here are merged into the settings passed to each Graphile
-       * Engine plugin - useful for configuring how the plugins operate.
-       */
-
-      // Makes all SQL function arguments except those with defaults non-nullable
-      pgStrictFunctions: true,
-    },
-
-    /*
-     * Postgres transaction settings for each GraphQL query/mutation to
-     * indicate to Postgres who is attempting to access the resources. These
-     * will be referenced by RLS policies/triggers/etc.
-     *
-     * Settings set here will be set using the equivalent of `SET LOCAL`, so
-     * certain things are not allowed. You can override Postgres settings such
-     * as 'role' and 'search_path' here; but for settings indicating the
-     * current user, session id, or other privileges to be used by RLS policies
-     * the setting names must contain at least one and at most two period
-     * symbols (`.`), and the first segment must not clash with any Postgres or
-     * extension settings. We find `jwt.claims.*` to be a safe namespace,
-     * whether or not you're using JWTs.
-     */
-    // async pgSettings(req) {
-    //   const sessionId = uuidOrNull(req.user?.session_id);
-    //   if (sessionId) {
-    //     // Update the last_active timestamp (but only do it at most once every 15 seconds to avoid too much churn).
-    //     await rootPgPool.query(
-    //       "UPDATE app_private.sessions SET last_active = NOW() WHERE uuid = $1 AND last_active < NOW() - INTERVAL '15 seconds'",
-    //       [sessionId]
-    //     );
-    //   }
-    //   return {
-    //     // Everyone uses the "visitor" role currently
-    //     role: process.env.DATABASE_VISITOR,
+    // graphileBuildOptions: {
+    //   /*
+    //    * Any properties here are merged into the settings passed to each Graphile
+    //    * Engine plugin - useful for configuring how the plugins operate.
+    //    */
     //
-    //     /*
-    //      * Note, though this says "jwt" it's not actually anything to do with
-    //      * JWTs, we just know it's a safe namespace to use, and it means you
-    //      * can use JWTs too, if you like, and they'll use the same settings
-    //      * names reducing the amount of code you need to write.
-    //      */
-    //     "jwt.claims.session_id": sessionId,
-    //   };
+    //   // Makes all SQL function arguments except those with defaults non-nullable
+    //   pgStrictFunctions: true,
     // },
-
-    // readReplicaPgPool ...,
   };
   return options;
 }
