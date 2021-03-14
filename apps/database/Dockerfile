@@ -1,7 +1,19 @@
-ARG BASE_IMAGE=node:12.18.2-alpine3.11
+ARG BASE_IMAGE
 
 FROM $BASE_IMAGE as base
 
-WORKDIR /app
+WORKDIR /apps/database
 
-CMD yarn start
+FROM base as dev
+
+CMD yarn dev
+
+FROM base as production_build
+
+CMD yarn migrate
+
+COPY apps/database/package.json apps/database/yarn.lock /apps/database/
+
+RUN yarn --frozen-lockfile
+
+COPY apps/database/ /apps/database/

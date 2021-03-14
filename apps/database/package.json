@@ -1,9 +1,15 @@
 {
   "private": true,
+  "engines": {
+    "node": ">=15.8.0"
+  },
   "scripts": {
-    "start": "graphile-migrate watch",
+    "dev": "graphile-migrate watch",
     "commit": "graphile-migrate commit",
-    "mig-init": "graphile-migrate init"
+    "mig-init": "graphile-migrate init",
+    "migrate": "graphile-migrate migrate",
+    "load": "sh ./mig_data.sh",
+    "reset": "graphile-migrate reset"
   },
   "dependencies": {
     "graphile-migrate": "^1.0.2"
