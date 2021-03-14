@@ -17,14 +17,13 @@ services:
   migrations:
     environment:
       ROOT_DATABASE_URL: postgres://$DATABASE_OWNER:$DATABASE_OWNER_PASSWORD@$DATABASE_HOST/template1
-      DATABASE_URL: postgres://$DATABASE_OWNER:$DATABASE_OWNER_PASSWORD@$DATABASE_HOST/$DATABASE_NAME
       SHADOW_DATABASE_URL: postgres://$DATABASE_OWNER:$DATABASE_OWNER_PASSWORD@$DATABASE_HOST/${DATABASE_NAME}_shadow
     build:
       context: .
       dockerfile: apps/database/Dockerfile
       target: dev
       args:
-        BASE_IMAGE: ${BASE_IMAGE_NODE_ALPINE}
+        BASE_IMAGE: $BASE_IMAGE_NODE_ALPINE
     volumes:
       - ./apps/database:/apps/database
     env_file:
@@ -34,19 +33,24 @@ services:
 
   gql:
     environment:
-      DATABASE_AUTHENTICATOR_URL: postgres://$DATABASE_AUTHENTICATOR:$DATABASE_AUTHENTICATOR_PASSWORD@$$DATABASE_HOST/$DATABASE_NAME
+      AUTH_DATABASE_URL: postgres://$DATABASE_AUTHENTICATOR:$DATABASE_AUTHENTICATOR_PASSWORD@$DATABASE_HOST/$DATABASE_NAME
+      SECRET: SUPERSECRETE
+      NODE_ENV: development
     build:
       context: .
-      target: dev
       dockerfile: apps/graphql/Dockerfile
+      target: dev
+      args:
+        BASE_IMAGE: $BASE_IMAGE_NODE_ALPINE
     volumes:
-      - ./apps/graphql:/app
+      - ./apps/web:/apps/web:ro
+      - ./apps/graphql:/apps/graphql
     env_file:
       - .env
-    ports:
-      - 5000:5000
     depends_on:
       - migrations
+    ports:
+      - 5000:5000
 
 volumes:
   pg_data:

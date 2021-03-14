@@ -2,7 +2,7 @@ const plugins = [
   require("postgraphile-plugin-connection-filter"),
   require("@graphile-contrib/pg-order-by-related"),
 ];
-const { handleErrors } = require("./utils");
+const { handleErrors } = require("./utils/utils");
 
 let postgraphileOptions = {
   enableCors: true,

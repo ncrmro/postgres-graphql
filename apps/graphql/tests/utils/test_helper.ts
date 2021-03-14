@@ -13,12 +13,14 @@ const {
 const { graphql } = require("graphql");
 const MockReq = require("mock-req");
 
-const { postgraphileOptions } = require("../../src/options");
+const { postgraphileOptions } = require("../options");
 
 // This is the role that your normal PostGraphile connection string would use,
 // e.g. `postgres://POSTGRAPHILE_AUTHENTICATOR_ROLE:password@host/db`
 const POSTGRAPHILE_AUTHENTICATOR_ROLE = "xe";
-const dbURI = process.env.DATABASE_URL || "postgres://postgres_user:pg_pass@localhost:5432/myapp";
+const dbURI =
+  process.env.DATABASE_URL ||
+  "postgres://postgres_user:pg_pass@localhost:5432/myapp";
 const dbSchema = "xe";
 
 /*

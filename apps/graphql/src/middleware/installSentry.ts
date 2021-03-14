@@ -1,7 +1,8 @@
-let Sentry = require("@sentry/node");
-const SentryTracing = require("@sentry/tracing");
+import { Express } from "express";
+import * as Sentry from "@sentry/node";
+import * as SentryTracing from "@sentry/tracing";
 
-function initializeSentry(app) {
+export default function initializeSentry(app: Express) {
   console.log("Initializing Sentry");
   Sentry.init({
     enabled: true,
@@ -30,27 +31,3 @@ function initializeSentry(app) {
     throw new Error("My first Sentry error!");
   });
 }
-
-function handleErrors(errors) {
-  return errors.map((error) => {
-    const { message: rawMessage, locations, path, originalError } = error;
-    // const code = originalError ? originalError["code"] : null;
-    // const localPluck = ERROR_MESSAGE_OVERRIDES[code] || pluck;
-    // const exception = localPluck(originalError || error);
-    console.log(
-      `Sentry threw and error ${process.env.RELEASE} ${process.env.ENVIRONMENT}`,
-      error
-    );
-    Sentry.captureException(error);
-    return {
-      message: rawMessage,
-      locations,
-      path,
-      extensions: {
-        exception: error,
-      },
-    };
-  });
-}
-
-module.exports = { Sentry, initializeSentry, handleErrors };
