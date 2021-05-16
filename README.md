@@ -35,43 +35,9 @@ containers.
 cp .env.example .env
 ```
 
-Pull the images
-
 ```bash
-docker-compose pull
+sh ./init.sh
 ```
-
-And then we can build our services.
-
-```bash
-docker-compose build
-```
-
-### Database
-
-Initialize and ensure the database is ready to go.
-
-```bash
-docker-compose up database
-```
-
-#### Schema and Migrations
-
-Install the dependencies
-
-```bash
-docker-compose run migrations yarn
-```
-
-Initialize graphile-migrate
-
-```bash
-docker-compose run migrations yarn graphile-migrate init
-```
-
-At this point, we are ready to start the migrations watch service. Kill our
-existing docker-compose process with `control + c`. Then start up the migration
-watcher.
 
 ```bash
 docker-compose up database migrations

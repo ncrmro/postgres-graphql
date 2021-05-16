@@ -62,9 +62,8 @@
    * these.
    */
   "placeholders": {
-    ":DATABASE_VISITOR": "!ENV", // Uses process.env.DATABASE_VISITOR
     ":DATABASE_AUTHENTICATOR": "!ENV",
-    ":DATABASE_AUTHENTICATOR_PASSWORD": "!ENV",
+    ":DATABASE_VISITOR": "!ENV"
   },
 
   /*
@@ -87,7 +86,7 @@
    * afterReset: actions executed after a `graphile-migrate reset` command.
    */
   "afterReset": [
-    "afterReset.sql",
+     "afterReset.sql",
     // { "_": "command", "command": "graphile-worker --schema-only" },
   ],
  

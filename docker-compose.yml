@@ -15,16 +15,8 @@ services:
       - 5432:5432
 
   migrations:
-    environment:
-      ROOT_DATABASE_URL: postgres://$DATABASE_OWNER:$DATABASE_OWNER_PASSWORD@$DATABASE_HOST/template1
-      DATABASE_URL: postgres://$DATABASE_OWNER:$DATABASE_OWNER_PASSWORD@$DATABASE_HOST/$DATABASE_NAME
-      SHADOW_DATABASE_URL: postgres://$DATABASE_OWNER:$DATABASE_OWNER_PASSWORD@$DATABASE_HOST/${DATABASE_NAME}_shadow
-    build:
-      context: .
-      dockerfile: apps/database/Dockerfile
-      target: dev
-      args:
-        BASE_IMAGE: ${BASE_IMAGE_NODE_ALPINE}
+    image: $BASE_IMAGE_NODE_ALPINE
+    working_dir: /apps/database
     volumes:
       - ./apps/database:/apps/database
     env_file:
@@ -33,14 +25,10 @@ services:
       - db
 
   gql:
-    environment:
-      DATABASE_AUTHENTICATOR_URL: postgres://$DATABASE_AUTHENTICATOR:$DATABASE_AUTHENTICATOR_PASSWORD@$$DATABASE_HOST/$DATABASE_NAME
-    build:
-      context: .
-      target: dev
-      dockerfile: apps/graphql/Dockerfile
+    image: $BASE_IMAGE_NODE_ALPINE
+    working_dir: /apps/graphql
     volumes:
-      - ./apps/graphql:/app
+      - ./apps/graphql:/graphql
     env_file:
       - .env
     ports:

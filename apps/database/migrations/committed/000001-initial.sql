@@ -1,6 +1,6 @@
 --! Previous: -
 --! Hash: sha1:de60470eae2711674026eea0ced5e4917011e6ea
---! Message: schemas-and-timestamp-trigger
+--! Message: initial
 
 --! split: 0001-reset.sql
 /*
