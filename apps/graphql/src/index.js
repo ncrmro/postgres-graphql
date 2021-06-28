@@ -9,7 +9,7 @@ console.info(
 );
 const app = express();
 
-app.use(postgraphile(process.env.DATABASE_URL, "public", postgraphileOptions));
+app.use(postgraphile(process.env.DATABASE_URL, "app_public", postgraphileOptions));
 
 app.get("/healthcheck", (req, res) => {
   res.send("Healthy!");

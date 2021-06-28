@@ -1,6 +1,8 @@
 const plugins = [
   require("postgraphile-plugin-connection-filter"),
   require("@graphile-contrib/pg-order-by-related"),
+  require("@graphile-contrib/pg-many-to-many"),
+  require("postgraphile/plugins").TagsFilePlugin,
 ];
 const { handleErrors } = require("./utils");
 
@@ -8,8 +10,10 @@ let postgraphileOptions = {
   enableCors: true,
   exportGqlSchemaPath: "schema.graphql",
   appendPlugins: plugins,
-  // TODO: to use graphiql comment out the following lines:
   ignoreRBAC: false,
+  jwtPgTypeIdentifier: "app_public.jwt_token",
+  enableQueryBatching: true,
+  legacyRelations: "omit",
 };
 
 const prod = process.env.GRAPHQL_SERVER_PRODUCTION === "true";
@@ -24,21 +28,16 @@ if (!prod) {
     extendedErrors: ["hint", "detail", "errcode"],
     graphiql: true,
     enhanceGraphiql: true,
+    allowExplain: true,
     jwtSecret: "test_secret",
-    jwtPgTypeIdentifier: "public.jwt_token",
-    // TODO: expiresIn is wrong key I think
-    // jwtSignOptions: {
-    //   expiresIn: "1y",
-    // },
+    ownerConnectionString: process.env.ROOT_DATABASE_URL,
   };
 } else {
   postgraphileOptions = {
     ...postgraphileOptions,
     handleErrors,
     graphiql: false,
-    enableQueryBatching: true,
     jwtSecret: process.env.JWT_SECRET_KEY,
-    jwtPgTypeIdentifier: "public.jwt_token",
   };
 }
 

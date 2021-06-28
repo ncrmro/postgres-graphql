@@ -17,6 +17,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@graphile-contrib/pg-many-to-many": "^1.0.0",
     "@graphile-contrib/pg-order-by-related": "^1.0.0-beta.6",
     "express": "^4.17.1",
     "graphile-build": "^4.12.0",
