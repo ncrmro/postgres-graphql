@@ -1,7 +1,6 @@
 const express = require("express");
 const { postgraphile } = require("postgraphile");
 const { prod, host, port, postgraphileOptions } = require("./options");
-const { Sentry, initializeSentry } = require("./utils");
 
 console.info(
   `Starting GraphQL server in ${
@@ -9,9 +8,6 @@ console.info(
   } on ${host}:${port}`
 );
 const app = express();
-if (prod) {
-  initializeSentry(app);
-}
 
 app.use(postgraphile(process.env.DATABASE_URL, "public", postgraphileOptions));
 
