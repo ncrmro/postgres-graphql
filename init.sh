@@ -29,9 +29,9 @@ docker-compose exec -T db psql -c "GRANT CONNECT ON DATABASE ${DATABASE_OWNER} T
 docker-compose exec -T db psql --dbname "${DATABASE_OWNER}" -c "ALTER SCHEMA public OWNER TO ${DATABASE_OWNER};"
 docker-compose exec -T db psql -c "GRANT ${DATABASE_VISITOR} TO ${DATABASE_AUTHENTICATOR};"
 
-#echo "Installing Worker dependencies and generating types, worker migrations must be present first."
-#docker-compose run --rm --no-deps worker yarn --frozen-lockfile
-#docker-compose run --rm --no-deps worker yarn graphile-worker --schema-only
+echo "Installing Worker dependencies and generating types, worker migrations must be present first."
+docker-compose run --rm --no-deps worker yarn --frozen-lockfile
+docker-compose run --rm --no-deps worker yarn graphile-worker --schema-only
 
 echo "Loading data into database"
 docker-compose run --rm --no-deps migrations yarn load

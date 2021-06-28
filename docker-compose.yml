@@ -34,5 +34,16 @@ services:
     depends_on:
       - migrations
 
+  worker:
+    image: $BASE_IMAGE_NODE_ALPINE
+    command: yarn dev
+    working_dir: /apps/worker
+    env_file:
+      - .env
+    volumes:
+      - ./apps/worker:/apps/worker
+    depends_on:
+      - migrations
+
 volumes:
   pg_data:

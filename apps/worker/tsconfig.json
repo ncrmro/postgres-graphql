@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "rootDir": "./src",
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "baseUrl": ".",
+  },
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}
