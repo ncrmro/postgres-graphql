@@ -1,5 +1,5 @@
 {
-  "name": "jtx-graphql",
+  "name": "graphql",
   "version": "1.0.0",
   "description": "A GraphQL server that is dynamically generated using Postgraphile",
   "engines": {
