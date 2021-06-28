@@ -8,7 +8,7 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data:rw
     ports:
-      - 5432:5432
+      - ${DATBASE_PORT:-5432}:5432
 
   migrations:
     image: $BASE_IMAGE_NODE_ALPINE
@@ -28,7 +28,7 @@ services:
     env_file:
       - .env
     ports:
-      - 5000:5000
+      - ${GRAPHQL_PORT:-5000}:5000
     depends_on:
       - migrations
 
