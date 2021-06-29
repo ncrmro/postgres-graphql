@@ -1,14 +1,8 @@
 ARG BASE_IMAGE
 
-FROM $BASE_IMAGE as base
+FROM $BASE_IMAGE
 
 WORKDIR /apps/database
-
-FROM base as dev
-
-CMD yarn dev
-
-FROM base as production_build
 
 CMD yarn migrate
 

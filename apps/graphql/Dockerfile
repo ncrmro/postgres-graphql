@@ -1,6 +1,6 @@
 ARG BASE_IMAGE=node:12.18.2-alpine3.11
 
-FROM $BASE_IMAGE as base
+FROM $BASE_IMAGE
 
 WORKDIR /app
 
@@ -15,7 +15,5 @@ COPY apps/graphql/package.json apps/graphql/yarn.lock /app/
 RUN yarn install --production=true
 
 COPY apps/graphql/src /app/src
-
-FROM base as dev
 
 RUN yarn install

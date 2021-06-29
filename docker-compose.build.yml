@@ -1,0 +1,30 @@
+version: "3.7"
+
+services:
+  migrations:
+    image: postgres-graphql/migrations
+    build:
+      context: .
+      dockerfile: ./apps/database/Dockerfile
+      args:
+        BASE_IMAGE: node:15.8.0-alpine3.12
+
+  gql:
+    image: postgres-graphql/graphql
+    build:
+      context: .
+      dockerfile: ./apps/graphql/Dockerfile
+      args:
+        BASE_IMAGE: node:15.8.0-alpine3.12
+
+  worker:
+    image: postgres-graphql/worker
+    build:
+      context: .
+      dockerfile: ./apps/worker/Dockerfile
+      target: prod
+      args:
+        BASE_IMAGE: node:15.8.0-alpine3.12
+
+volumes:
+  pg_data:

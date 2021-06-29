@@ -4,10 +4,6 @@ FROM $BASE_IMAGE as base
 
 WORKDIR /apps/worker
 
-FROM base as dev
-
-CMD yarn dev
-
 FROM base as build
 
 COPY apps/worker/package.json apps/worker/yarn.lock /apps/worker/
@@ -20,7 +16,7 @@ COPY apps/worker/src /apps/worker/src
 
 RUN yarn build
 
-FROM base as production
+FROM base as prod
 
 CMD yarn start
 
