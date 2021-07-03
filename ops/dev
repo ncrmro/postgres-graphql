@@ -58,25 +58,17 @@ if [ $1 = "install" ] || [ $1 = "reset" ]; then
   echo "${LIGHTGREEN}Installing...${NOCOLOR}"
   kubectl create namespace ${NAMESPACE}
   helm install --namespace ${NAMESPACE} --set postgresqlPassword=${POSTGRES_PASSWORD} --wait ${HELM_NAME_POSTGRES} charts/postgres
-
-#  echo "${LIGHTGREEN}Creating database users...${NOCOLOR}"
-#  kubectl exec --namespace ${NAMESPACE} postgres-postgresql-0 -- psql postgres://postgres:${POSTGRES_PASSWORD}@localhost:5432/postgres -c "
-#    CREATE USER ${DATABASE_OWNER} WITH PASSWORD '${DATABASE_OWNER_PASSWORD}';
-#    CREATE USER ${DATABASE_AUTHENTICATOR} WITH PASSWORD '${DATABASE_OWNER_PASSWORD}';
-#    CREATE USER ${DATABASE_VISITOR};
-#  "
+  echo "${LIGHTGREEN}Creating database users...${NOCOLOR}"
+  kubectl exec --namespace ${NAMESPACE} postgres-postgresql-0 -- psql postgres://postgres:${POSTGRES_PASSWORD}@localhost:5432/postgres -c "
+    CREATE USER ${DATABASE_OWNER} WITH PASSWORD '${DATABASE_OWNER_PASSWORD}';
+    CREATE USER ${DATABASE_AUTHENTICATOR} WITH PASSWORD '${DATABASE_OWNER_PASSWORD}';
+    CREATE USER ${DATABASE_VISITOR};
+  "
 fi
 
 if [ $1 = "upgrade" ]; then
   echo "${LIGHTGREEN}Update...${NOCOLOR}"
   helm upgrade --namespace ${NAMESPACE} --set postgresqlPassword=${POSTGRES_PASSWORD} ${HELM_NAME_POSTGRES} charts/postgres
-
-#  echo "${LIGHTGREEN}Creating database users...${NOCOLOR}"
-#  kubectl exec --namespace ${NAMESPACE} postgres-postgresql-0 -- psql postgres://postgres:${POSTGRES_PASSWORD}@localhost:5432/postgres -c "
-#    CREATE USER ${DATABASE_OWNER} WITH PASSWORD '${DATABASE_OWNER_PASSWORD}';
-#    CREATE USER ${DATABASE_AUTHENTICATOR} WITH PASSWORD '${DATABASE_OWNER_PASSWORD}';
-#    CREATE USER ${DATABASE_VISITOR};
-#  "
 fi
 
 ##helm repo add bitnami https://charts.bitnami.com/bitnami
