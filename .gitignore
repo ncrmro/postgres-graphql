@@ -7,3 +7,5 @@ generated
 # Worker
 dist
 .ethereal
+
+ops/charts/**/charts

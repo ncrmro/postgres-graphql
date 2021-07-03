@@ -1,0 +1,98 @@
+#!/bin/sh
+
+# Parse dotenv
+if [ -f ../.env ]; then
+  export $(cat ../.env | sed 's/#.*//g' | xargs)
+fi
+
+NOCOLOR='\033[0m'
+RED='\033[0;31m'
+YELLOW='\033[1;33m'
+LIGHTGREEN='\033[1;32m'
+
+if [ $# -eq 0 ]; then
+  echo "${RED}An argument must be provided${NOCOLOR}"
+  echo "${YELLOW}Options are, reset, install, and upgrade${NOCOLOR}"
+  exit 1
+fi
+
+HELM_NAME_POSTGRES="postgres"
+HELM_NAME_GRAPHQL="graphql"
+HELM_NAME_WORKER="worker"
+NAMESPACE="postgres-graphql"
+
+if [ $1 = "update" ]; then
+  cd charts/postgres
+  helm dependency update
+fi
+
+if [ $1 = "reset" ]; then
+  echo "${LIGHTGREEN}Uninstalling existing charts${NOCOLOR}"
+  for NAME in $HELM_NAME_DB $HELM_NAME_GRAPHQL $HELM_NAME_WORKER; do
+    helm uninstall --namespace ${NAMESPACE} ${NAME}
+  done
+  kubectl delete namespace ${NAMESPACE}
+fi
+
+retry() {
+  max_attempts="$1"; shift
+  seconds="$1"; shift
+  cmd="$@"
+  attempt_num=1
+
+  until $cmd
+  do
+    if [ $attempt_num -eq $max_attempts ]
+    then
+      echo "Attempt $attempt_num failed and there are no more attempts left!"
+      return 1
+    else
+      echo "Attempt $attempt_num failed! Trying again in $seconds seconds..."
+      attempt_num=`expr "$attempt_num" + 1`
+      sleep "$seconds"
+    fi
+  done
+}
+
+if [ $1 = "install" ] || [ $1 = "reset" ]; then
+  echo "${LIGHTGREEN}Installing...${NOCOLOR}"
+  kubectl create namespace ${NAMESPACE}
+  helm install --namespace ${NAMESPACE} --set postgresqlPassword=${POSTGRES_PASSWORD} --wait ${HELM_NAME_POSTGRES} charts/postgres
+
+#  echo "${LIGHTGREEN}Creating database users...${NOCOLOR}"
+#  kubectl exec --namespace ${NAMESPACE} postgres-postgresql-0 -- psql postgres://postgres:${POSTGRES_PASSWORD}@localhost:5432/postgres -c "
+#    CREATE USER ${DATABASE_OWNER} WITH PASSWORD '${DATABASE_OWNER_PASSWORD}';
+#    CREATE USER ${DATABASE_AUTHENTICATOR} WITH PASSWORD '${DATABASE_OWNER_PASSWORD}';
+#    CREATE USER ${DATABASE_VISITOR};
+#  "
+fi
+
+if [ $1 = "upgrade" ]; then
+  echo "${LIGHTGREEN}Update...${NOCOLOR}"
+  helm upgrade --namespace ${NAMESPACE} --set postgresqlPassword=${POSTGRES_PASSWORD} ${HELM_NAME_POSTGRES} charts/postgres
+
+#  echo "${LIGHTGREEN}Creating database users...${NOCOLOR}"
+#  kubectl exec --namespace ${NAMESPACE} postgres-postgresql-0 -- psql postgres://postgres:${POSTGRES_PASSWORD}@localhost:5432/postgres -c "
+#    CREATE USER ${DATABASE_OWNER} WITH PASSWORD '${DATABASE_OWNER_PASSWORD}';
+#    CREATE USER ${DATABASE_AUTHENTICATOR} WITH PASSWORD '${DATABASE_OWNER_PASSWORD}';
+#    CREATE USER ${DATABASE_VISITOR};
+#  "
+fi
+
+##helm repo add bitnami https://charts.bitnami.com/bitnami
+#
+##helm install pg-gql-db bitnami/postgresql
+##helm install pg-gql charts/postgres-graphql
+#
+#export POSTGRES_ROOT_PASSWORD=$(kubectl get secret --namespace default pg-gql-db-postgresql -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+#
+#kubectl exec pg-gql-db-postgresql-0 -- psql postgres://postgres:${POSTGRES_ROOT_PASSWORD}@localhost:5432/postgres -c "
+#DROP USER IF EXISTS ${DATABASE_OWNER};
+#DROP USER IF EXISTS ${DATABASE_AUTHENTICATOR};
+#DROP USER IF EXISTS ${DATABASE_VISITOR};;
+#CREATE USER ${DATABASE_OWNER} WITH PASSWORD '${DATABASE_OWNER_PASSWORD}';
+#CREATE USER ${DATABASE_AUTHENTICATOR} WITH PASSWORD '${DATABASE_OWNER_PASSWORD}';
+#CREATE USER ${DATABASE_VISITOR};
+#"
+#
+#helm upgrade pg-gql charts/postgres-graphql
