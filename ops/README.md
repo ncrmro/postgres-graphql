@@ -1,3 +1,6 @@
+## Charts
+
+- postgres - Bitnmai Postgres chart but also creates the secrets required for rest of stack
 
 ## Running Locally
 
