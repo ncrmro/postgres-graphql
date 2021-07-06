@@ -1,6 +1,7 @@
 ## Charts
 
 - postgres - Bitnmai Postgres chart but also creates the secrets required for rest of stack
+- graphile-migrate - Job that uses database owner role to run migrations
 
 ## Running Locally
 

@@ -17,6 +17,7 @@ if [ $# -eq 0 ]; then
 fi
 
 HELM_NAME_POSTGRES="postgres"
+HELM_NAME_MIGRATIONS="migrations"
 HELM_NAME_GRAPHQL="graphql"
 HELM_NAME_WORKER="worker"
 NAMESPACE="postgres-graphql"
@@ -28,7 +29,7 @@ fi
 
 if [ $1 = "reset" ]; then
   echo "${LIGHTGREEN}Uninstalling existing charts${NOCOLOR}"
-  for NAME in $HELM_NAME_DB $HELM_NAME_GRAPHQL $HELM_NAME_WORKER; do
+  for NAME in $HELM_NAME_DB $HELM_NAME_MIGRATIONS $HELM_NAME_GRAPHQL $HELM_NAME_WORKER; do
     helm uninstall --namespace ${NAMESPACE} ${NAME}
   done
   kubectl delete namespace ${NAMESPACE}
@@ -57,18 +58,31 @@ retry() {
 if [ $1 = "install" ] || [ $1 = "reset" ]; then
   echo "${LIGHTGREEN}Installing...${NOCOLOR}"
   kubectl create namespace ${NAMESPACE}
-  helm install --namespace ${NAMESPACE} --set postgresqlPassword=${POSTGRES_PASSWORD} --wait ${HELM_NAME_POSTGRES} charts/postgres
+  helm install --debug --namespace ${NAMESPACE} \
+    --set postgresqlPassword=${POSTGRES_PASSWORD} \
+    --set database.name=${DATABASE_NAME} \
+    --set database.owner.username=${DATABASE_OWNER} \
+    --set database.owner.password=${DATABASE_OWNER_PASSWORD} \
+    --set database.authenticator.username=${DATABASE_AUTHENTICATOR} \
+    --set database.authenticator.password=${DATABASE_AUTHENTICATOR_PASSWORD} \
+    --set database.visitor.username=${DATABASE_VISITOR} \
+    --wait ${HELM_NAME_POSTGRES} charts/postgres
   echo "${LIGHTGREEN}Creating database users...${NOCOLOR}"
   kubectl exec --namespace ${NAMESPACE} postgres-postgresql-0 -- psql postgres://postgres:${POSTGRES_PASSWORD}@localhost:5432/postgres -c "
     CREATE USER ${DATABASE_OWNER} WITH PASSWORD '${DATABASE_OWNER_PASSWORD}';
-    CREATE USER ${DATABASE_AUTHENTICATOR} WITH PASSWORD '${DATABASE_OWNER_PASSWORD}';
+    CREATE USER ${DATABASE_AUTHENTICATOR} WITH PASSWORD '${DATABASE_AUTHENTICATOR_PASSWORD}';
     CREATE USER ${DATABASE_VISITOR};
   "
+  kubectl exec --namespace ${NAMESPACE} postgres-postgresql-0 -- psql postgres://postgres:${POSTGRES_PASSWORD}@localhost:5432/postgres -c "
+    CREATE DATABASE ${DATABASE_NAME} OWNER ${DATABASE_OWNER};
+  "
+  helm install --namespace ${NAMESPACE}  --wait ${HELM_NAME_MIGRATIONS} charts/graphile-migrate-job
 fi
 
 if [ $1 = "upgrade" ]; then
   echo "${LIGHTGREEN}Update...${NOCOLOR}"
   helm upgrade --namespace ${NAMESPACE} --set postgresqlPassword=${POSTGRES_PASSWORD} ${HELM_NAME_POSTGRES} charts/postgres
+  helm upgrade --namespace ${NAMESPACE} ${HELM_NAME_MIGRATIONS} charts/graphile-migrate-job
 fi
 
 ##helm repo add bitnami https://charts.bitnami.com/bitnami

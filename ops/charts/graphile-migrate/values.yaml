@@ -1,0 +1,17 @@
+image:
+  repository: registry.gitlab.com/ncrmro/postgres-graphql/migrations
+  pullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "latest"
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+databaseURISecret: postgres-database-owner-url-credentials
+
+credentialSecrets:
+  owner: postgres-owner-credentials
+  authenticator: postgres-authenticator-credentials
+  visitor: postgres-visitor-credentials
+
