@@ -7,3 +7,9 @@ postgresqlPassword: testpass
 global:
   postgresql:
     existingSecret: postgres-root-credentials
+
+database:
+  name: example-db
+  owner:
+    username: defaultOwner
+    password: defaultOwnerPassword
