@@ -21,10 +21,20 @@ We can then reset our helm installs with
 ./dev reset
 ```
 
-### Development and Debugging
+## Development and Debugging
 
 A chart can be linted for errors (much faster than running `reset` for surfacing templating errors)
 
 ```bash
 helm lint charts/postgres
+```
+
+### Local Postgres Access
+
+```bash
+export POSTGRES_ADMIN_PASSWORD=$(kubectl get secret --namespace postgres-graphql postgres-root-credentials -o jsonpath="{.data.postgresql-password}" | base64 --decode)
+```
+
+```bash
+kubectl port-forward --namespace postgres-graphql  svc/postgres-postgresql 5432:5432
 ```
