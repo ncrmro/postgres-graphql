@@ -11,5 +11,15 @@ global:
 database:
   name: example-db
   owner:
-    username: defaultOwner
-    password: defaultOwnerPassword
+    username: owner
+    password: ownerPassword
+  authenticator:
+    username: authenticator
+    password: authenticatorPassword
+  visitor:
+    username: visitor
+
+postgresql:
+  image:
+    repository: bitnami/postgresql
+    tag: 13.3.0
