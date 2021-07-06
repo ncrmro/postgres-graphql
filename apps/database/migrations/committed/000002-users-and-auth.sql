@@ -1,5 +1,5 @@
 --! Previous: sha1:de60470eae2711674026eea0ced5e4917011e6ea
---! Hash: sha1:9dea4fdd69d1299eefc0f9295f1ceea5face488e
+--! Hash: sha1:59b313c6c36382410785d19241393e8110c9b9af
 --! Message: users-and-auth
 
 --! split: 0001-jwt-token-type.sql
@@ -21,6 +21,8 @@ $$ LANGUAGE sql STABLE;
 COMMENT ON FUNCTION app_public.viewer_id() IS 'Gets the id of the viewer who was identified by our JWT.';
 
 --! split: 0010-user-table.sql
+CREATE EXTENSION IF NOT EXISTS citext WITH SCHEMA public;
+
 DROP TABLE IF EXISTS app_public.user CASCADE;
 CREATE TABLE app_public.user
 (
@@ -183,6 +185,8 @@ CREATE TRIGGER _100_timestamps
 EXECUTE PROCEDURE app_private.tg__timestamps();
 
 --! split: 0060-authenticate-user.sql
+CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA public;
+
 CREATE FUNCTION app_public.authenticate(username citext,
                                         password text) RETURNS app_public.jwt_token AS
 $$
