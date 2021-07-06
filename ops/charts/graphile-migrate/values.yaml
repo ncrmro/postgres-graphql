@@ -15,3 +15,10 @@ credentialSecrets:
   authenticator: postgres-authenticator-credentials
   visitor: postgres-visitor-credentials
 
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000

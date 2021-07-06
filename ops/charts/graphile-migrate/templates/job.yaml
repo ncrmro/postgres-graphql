@@ -1,7 +1,9 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: database-migrations-{{ randNumeric 8 }}
+  name: {{ include "graphile-migrate.fullname" . }}
+  labels:
+    {{- include "graphile-migrate.labels" . | nindent 4 }}
 spec:
   # TODO not available in k3s yet, will need to manually clean up jobs
   ttlSecondsAfterFinished: 600 #60000
