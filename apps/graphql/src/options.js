@@ -16,7 +16,7 @@ let postgraphileOptions = {
   legacyRelations: "omit",
 };
 
-const prod = process.env.GRAPHQL_SERVER_PRODUCTION === "true";
+const prod = process.env.NODE_ENV === "production";
 const port = 5000;
 const host = "localhost";
 
@@ -30,7 +30,7 @@ if (!prod) {
     enhanceGraphiql: true,
     allowExplain: true,
     jwtSecret: "test_secret",
-    ownerConnectionString: process.env.ROOT_DATABASE_URL,
+    ownerConnectionString: process.env.OWNER_DATABASE_URL,
   };
 } else {
   postgraphileOptions = {
