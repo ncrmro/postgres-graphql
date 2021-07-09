@@ -37,7 +37,7 @@ if (!prod) {
     ...postgraphileOptions,
     handleErrors,
     graphiql: false,
-    jwtSecret: process.env.JWT_SECRET_KEY,
+    jwtSecret: process.env.JWT_SECRET,
   };
 }
 
