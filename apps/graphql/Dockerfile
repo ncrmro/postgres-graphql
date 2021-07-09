@@ -2,18 +2,16 @@ ARG BASE_IMAGE=node:12.18.2-alpine3.11
 
 FROM $BASE_IMAGE
 
-WORKDIR /app
-
-CMD yarn start
+WORKDIR /apps/graphql
 
 EXPOSE 5000
 
-RUN apk add postgresql-client
+CMD yarn start
 
-COPY apps/graphql/package.json apps/graphql/yarn.lock /app/
+COPY apps/graphql/package.json apps/graphql/yarn.lock /apps/graphql/
 
-RUN yarn install --production=true
+RUN yarn install --frozen-lockfile --production=true
 
-COPY apps/graphql/src /app/src
+COPY apps/graphql/src /apps/graphql/src
 
-RUN yarn install
+COPY apps/graphql/postgraphile.tags.json5 /apps/graphql/postgraphile.tags.json5

@@ -76,13 +76,15 @@ if [ $1 = "install" ] || [ $1 = "reset" ]; then
   kubectl exec --namespace ${NAMESPACE} postgres-postgresql-0 -- psql postgres://postgres:${POSTGRES_PASSWORD}@localhost:5432/postgres -c "
     CREATE DATABASE ${DATABASE_NAME} OWNER ${DATABASE_OWNER};
   "
-  helm install --namespace ${NAMESPACE}  --wait ${HELM_NAME_MIGRATIONS} charts/graphile-migrate
+  helm install --namespace ${NAMESPACE} --wait ${HELM_NAME_MIGRATIONS} charts/graphile-migrate
+  helm install --debug --namespace ${NAMESPACE} --set jwtKey=${JWT_SECRET} --wait ${HELM_NAME_GRAPHQL} charts/postgraphile
 fi
 
 if [ $1 = "upgrade" ]; then
   echo "${LIGHTGREEN}Update...${NOCOLOR}"
   helm upgrade --namespace ${NAMESPACE} --set postgresqlPassword=${POSTGRES_PASSWORD} ${HELM_NAME_POSTGRES} charts/postgres
   helm upgrade --namespace ${NAMESPACE} ${HELM_NAME_MIGRATIONS} charts/graphile-migrate
+  helm upgrade --namespace ${NAMESPACE} ${HELM_NAME_GRAPHQL} charts/postgraphile
 fi
 
 ##helm repo add bitnami https://charts.bitnami.com/bitnami
