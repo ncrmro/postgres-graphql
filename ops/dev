@@ -77,7 +77,8 @@ if [ $1 = "install" ] || [ $1 = "reset" ]; then
     CREATE DATABASE ${DATABASE_NAME} OWNER ${DATABASE_OWNER};
   "
   helm install --namespace ${NAMESPACE} --wait ${HELM_NAME_MIGRATIONS} charts/graphile-migrate
-  helm install --debug --namespace ${NAMESPACE} --set jwtKey=${JWT_SECRET} --wait ${HELM_NAME_GRAPHQL} charts/postgraphile
+  helm install --namespace ${NAMESPACE} --set jwtKey=${JWT_SECRET} --wait ${HELM_NAME_GRAPHQL} charts/postgraphile
+  helm install --namespace ${NAMESPACE} --set jwtKey=${JWT_SECRET} --wait ${HELM_NAME_WORKER} charts/graphile-worker
 fi
 
 if [ $1 = "upgrade" ]; then
@@ -85,6 +86,7 @@ if [ $1 = "upgrade" ]; then
   helm upgrade --namespace ${NAMESPACE} --set postgresqlPassword=${POSTGRES_PASSWORD} ${HELM_NAME_POSTGRES} charts/postgres
   helm upgrade --namespace ${NAMESPACE} ${HELM_NAME_MIGRATIONS} charts/graphile-migrate
   helm upgrade --namespace ${NAMESPACE} ${HELM_NAME_GRAPHQL} charts/postgraphile
+  helm upgrade --namespace ${NAMESPACE} ${HELM_NAME_WORKER} charts/graphile-worker
 fi
 
 ##helm repo add bitnami https://charts.bitnami.com/bitnami
